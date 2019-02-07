@@ -1,7 +1,7 @@
 #
 # Specify minimum CMake version and project name
 #
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.12)
 project (glowbox)
 
 #
@@ -9,7 +9,7 @@ project (glowbox)
 #
 set (CMAKE_CXX_STANDARD 17)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-add_compile_definitions(_USE_MATH_DEFINES)
+add_compile_definitions(_USE_MATH_DEFINES) # Adds cmath defines like M_PI
 set (CMAKE_VERBOSE_MAKEFILE 0) # 1 should be used for debugging
 set (CMAKE_SUPPRESS_REGENERATION TRUE) # Suppresses ZERO_CHECK
 if(MSVC)
@@ -36,7 +36,7 @@ add_subdirectory (lib/glfw)
 option (SFML_BUILD_GRAPHICS OFF)
 option (SFML_BUILD_WINDOW OFF)
 option (SFML_BUILD_NETWORK OFF)
-add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
+add_compile_definitions(_HAS_AUTO_PTR_ETC=1) #Ensures that the library may use std::auto_ptr in Visual Studio 2017
 add_subdirectory(lib/SFML)
 
 #
@@ -80,8 +80,11 @@ source_group ("libraries" FILES ${VENDORS_SOURCES})
 #
 # Set executable and target link libraries
 #
-add_definitions (-DGLFW_INCLUDE_NONE
-                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
+add_compile_definitions (
+	GLFW_INCLUDE_NONE
+	PROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\"
+	)
+
 add_executable (${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS}
                                 ${PROJECT_SHADERS} ${PROJECT_CONFIGS}
                                 ${VENDORS_SOURCES})
